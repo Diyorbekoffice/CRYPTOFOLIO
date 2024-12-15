@@ -44,7 +44,8 @@
   .home-page{
     background-image: url(./assets/images/homeBG.png);
     background-repeat: no-repeat;
-    background-size: auto;
+    background-size: cover;
+    width: 100%;
   }
   .watchlist {
     position: fixed;
