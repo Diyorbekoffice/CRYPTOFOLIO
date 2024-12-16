@@ -32,7 +32,6 @@ const Details = ({ currency }) => {
         setChartData(prices.map((price) => price[1]));
 
         if (days === 365) {
-          // 1 yil uchun o'rtacha narxni hisoblash
           const monthlyPrices = Array(12).fill().map(() => []);
           const monthlyLabels = [
             'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
@@ -40,11 +39,10 @@ const Details = ({ currency }) => {
 
           prices.forEach((price) => {
             const date = new Date(price[0]);
-            const month = date.getMonth(); // Oyni olish
-            monthlyPrices[month].push(price[1]); // Har oydagi narxlarni yig'ish
+            const month = date.getMonth(); 
+            monthlyPrices[month].push(price[1]); 
           });
 
-          // Har bir oy uchun o'rtacha narxni hisoblash
           const averageMonthlyPrices = monthlyPrices.map((prices) => {
             const sum = prices.reduce((a, b) => a + b, 0);
             return prices.length ? sum / prices.length : 0;
@@ -53,20 +51,17 @@ const Details = ({ currency }) => {
           setChartData(averageMonthlyPrices);
           setChartLabels(monthlyLabels);
         } else if (days === 1) {
-          // 1 kunlik (soatlik) narxlar, faqat soatning 45-daqiqasidagi narxlarni olish
           const hourlyPrices = [];
           const hourlyLabels = [];
 
-          // Change this section to capture both 15 and 45 minutes
           prices.forEach((price) => {
             const date = new Date(price[0]);
             const minute = date.getMinutes();
 
             if (minute === 15 || minute === 45) {
               const hour = date.getHours();
-              const ampm = hour >= 12 ? 'PM' : 'AM';  // AM/PM format
-              const hourIn12 = hour % 12 || 12;  // Convert to 12-hour format
-
+              const ampm = hour >= 12 ? 'PM' : 'AM';
+              const hourIn12 = hour % 12 || 12;  
               hourlyPrices.push(price[1]);
               hourlyLabels.push(`${hourIn12}:${minute < 10 ? '0' + minute : minute} ${ampm}`);
             }
@@ -75,7 +70,6 @@ const Details = ({ currency }) => {
           setChartLabels(hourlyLabels);
           setChartData(hourlyPrices);
         } else if (days === 30) {
-          // 30 kunlik (kunlik) narxlar, har kun uchun aniq sana
           const dailyPrices = Array(30).fill().map(() => []);
           const dailyLabels = [];
 
@@ -88,21 +82,19 @@ const Details = ({ currency }) => {
             const formattedDate = `${day < 10 ? '0' + day : day}-${month < 10 ? '0' + month : month}-${year}`;
             dailyPrices[day - 1] = price[1];
             if (!dailyLabels.includes(formattedDate)) {
-              dailyLabels.push(formattedDate); // Sanani qo'shish
+              dailyLabels.push(formattedDate); 
             }
           });
 
-          // Oxirgi narxni hozirgi narxga yangilash
           const currentPrice = prices[prices.length - 1][1];
-          dailyPrices[dailyPrices.length - 1] = currentPrice; // Oxirgi kunni hozirgi narx bilan almashtirish
+          dailyPrices[dailyPrices.length - 1] = currentPrice; 
           setChartData(dailyPrices);
           setChartLabels(dailyLabels);
         } else if (days === 90) {
-          // 3 oy uchun (har 10 kunlik) narxlar
           const threeMonthsPrices = [];
           const threeMonthsLabels = [];
 
-          const interval = 10; // Har 10 kunlik interval
+          const interval = 10; 
 
           for (let i = 0; i < prices.length; i += interval) {
             const slice = prices.slice(i, i + interval);
@@ -240,41 +232,25 @@ const Details = ({ currency }) => {
           <span className='text-left font-bold text-2xl'>Current Price: <span className=' font-normal'>{getCurrencySymbol(currency)}{(coinDetails.market_data.market_cap[currency.toLowerCase()]).toString().slice(0, -6).replace(/\B(?=(\d{3})+(?!\d))/g, ',')} M</span></span>
         </div>
 
-        {/* Tugmalar */}
         <div className='w-[1290px]'>
           <div className="chart-container">
             <Chart options={options} series={series} type="area" height={646} />
           </div>
           <div className="coin-buttons flex gap-4 mb-6">
             <button
-              onClick={() => handleDaysChange(1)}
-              className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold"
-            >
-              24h
+              onClick={() => handleDaysChange(1)} className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold">24h
             </button>
             <button
-              onClick={() => handleDaysChange(30)}
-              className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold"
-            >
-              30 Days
+              onClick={() => handleDaysChange(30)} className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold" >30 Days
             </button>
             <button
-              onClick={() => handleDaysChange(90)} // 3 months (90 days)
-              className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold"
-            >
-              3 Months
+              onClick={() => handleDaysChange(90)} className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold">3 Months
             </button>
             <button
-              onClick={() => handleDaysChange(365)}
-              className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold"
-            >
-              1 Year
+              onClick={() => handleDaysChange(365)} className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold">1 Year
             </button>
 
           </div>
-
-
-          {/* ApexChart */}
 
         </div>
       </div>

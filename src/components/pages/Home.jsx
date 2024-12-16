@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; 
 import Criptolist from "./Criptolist";
 
 const Home = ({ currency }) => {
@@ -7,10 +7,10 @@ const Home = ({ currency }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [visitedIds, setVisitedIds] = useState(() => {
-    return JSON.parse(localStorage.getItem("visitedIds")) || []; 
+    return JSON.parse(localStorage.getItem("visitedIds")) || [];
   });
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(
@@ -48,8 +48,8 @@ const Home = ({ currency }) => {
   const handlePageDetails = (id) => {
     if (!visitedIds.includes(id)) {
       const updatedIds = [...visitedIds, id];
-      setVisitedIds(updatedIds); // Update state
-      localStorage.setItem("visitedIds", JSON.stringify(updatedIds)); // Save to localStorage
+      setVisitedIds(updatedIds); 
+      localStorage.setItem("visitedIds", JSON.stringify(updatedIds)); 
     }
     navigate(`/details/${id}`);
   };
@@ -66,38 +66,24 @@ const Home = ({ currency }) => {
           Get all the Info regarding your favorite Crypto Currency
         </p>
         <div className="flex justify-center gap-40 mt-11">
-          {cryptoData.slice(currentIndex, currentIndex + 4).map((data) => (
-            <div
-              key={data.id}
-              onClick={() => handlePageDetails(data.id)}
-              className="flex flex-col gap-3 items-center text-center cursor-pointer"
-            >
-              <img
-                className="w-20 h-20"
-                src={data.image}
-                alt={`${data.name}`}
-              />
-              <div>
+          {
+            cryptoData.slice(currentIndex, currentIndex + 4).map((data) => (
+              <div key={data.id} onClick={() => handlePageDetails(data.id)} className="flex flex-col gap-3 items-center text-center cursor-pointer" >
+                <img className="w-20 h-20" src={data.image} alt={`${data.name}`} />
                 <div>
-                  <span>{data.name}</span>
-                  <span
-                    className={`ml-2 w-32 text-right ${
-                      data.price_change_percentage_24h > 0
-                        ? "text-green-500"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {data.price_change_percentage_24h > 0 ? "+" : ""}
-                    {data.price_change_percentage_24h.toFixed(2)}%
+                  <div>
+                    <span>{data.name}</span>
+                    <span
+                      className={`ml-2 w-32 text-right ${data.price_change_percentage_24h > 0 ? "text-green-500" : "text-red-500" }`} > {data.price_change_percentage_24h > 0 ? "+" : ""} {data.price_change_percentage_24h.toFixed(2)}%
+                    </span>
+                  </div>
+                  <span>
+                    {getCurrencySymbol(currency)} {data.current_price}
                   </span>
                 </div>
-                <span>
-                  {getCurrencySymbol(currency)}
-                  {data.current_price}
-                </span>
               </div>
-            </div>
-          ))}
+            ))
+          }
         </div>
       </div>
       <Criptolist currency={currency} visitedIds={visitedIds} />

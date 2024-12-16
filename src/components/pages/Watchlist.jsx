@@ -8,7 +8,6 @@ function Watchlist({ currency }) {
     const savedWatchlist = JSON.parse(localStorage.getItem('visitedIds')) || [];
     setWatchlist(savedWatchlist);
 
-    // Use the currency prop in the API call
     fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=gecko_desc&sparkline=false&price_change_percentage=24h`)
       .then(response => response.json())
       .then(data => {
@@ -16,7 +15,7 @@ function Watchlist({ currency }) {
         setCoins(filteredCoins);
       })
       .catch(error => console.error('Error fetching data: ', error));
-  }, [currency]); // Adding currency to the dependency array to re-fetch when currency changes
+  }, [currency]);
 
   const getCurrencySymbol = (currency) => {
     switch (currency) {
@@ -32,15 +31,12 @@ function Watchlist({ currency }) {
   };
 
   const handleDelete = (coinId) => {
-    // Remove the coin from the watchlist
     const updatedWatchlist = watchlist.filter(id => id !== coinId);
     setWatchlist(updatedWatchlist);
 
-    // Remove the coin from the coins state (to update the UI)
     const updatedCoins = coins.filter(coin => coin.id !== coinId);
     setCoins(updatedCoins);
 
-    // Update localStorage with the new watchlist
     localStorage.setItem('visitedIds', JSON.stringify(updatedWatchlist));
   };
 
@@ -51,34 +47,26 @@ function Watchlist({ currency }) {
         <div className=" w-[520px] bg-[#515151] p-9">
           <h2 className='text-center mb-10 font-medium text-3xl'>WATCHLIST</h2>
           <div className='flex flex-wrap gap-9'>
-            {coins.length > 0 ? (
-              coins.map(data => (
+            {
+              coins.length > 0 ? (coins.map(data => (
                 <div key={data.id} className="bg-[#14161A] rounded-[25px] p-4 shadow-lg w-[198px]">
                   <img src={data.image} alt={data.name} className="w-16 h-16 mx-auto" />
                   <div className="mt-4 text-center">
                     <span className="text-white">
-                      {getCurrencySymbol(currency)}{data.current_price
-                        .toString()
-                        .split('.')[0]
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
-                        (data.current_price % 1 !== 0
-                          ? '.' + data.current_price.toString().split('.')[1]
-                          : '')}.00
+                      {getCurrencySymbol(currency)}{data.current_price.toString().split('.')[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',') + (data.current_price % 1 !== 0 ? '.' + data.current_price.toString().split('.')[1] : '')}.00
                     </span>
                   </div>
                   <div className='flex justify-center mt-4'>
-                  <button
-                    className="mt-2 text-white bg-[#FF0000] py-1 px-4"
-                    onClick={() => handleDelete(data.id)}
-                  >
-                    Delete
-                  </button>
+                    <button
+                      className="mt-2 text-white bg-[#FF0000] py-1 px-4" onClick={() => handleDelete(data.id)}>Delete
+                    </button>
                   </div>
                 </div>
               ))
-            ) : (
-              <p className="text-center text-gray-500">No coins in your watchlist.</p>
-            )}
+              ) : (
+                <p className="text-center text-gray-500">No coins in your watchlist.</p>
+              )
+            }
           </div>
         </div>
       </div>
