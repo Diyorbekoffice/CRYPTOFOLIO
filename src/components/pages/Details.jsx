@@ -8,7 +8,7 @@ const Details = ({ currency }) => {
   const [loading, setLoading] = useState(true);
   const [chartData, setChartData] = useState([]);
   const [chartLabels, setChartLabels] = useState([]);
-  const [days, setDays] = useState(1); 
+  const [days, setDays] = useState(1);
 
   useEffect(() => {
     fetch(`https://api.coingecko.com/api/v3/coins/${id}`)
@@ -242,39 +242,40 @@ const Details = ({ currency }) => {
 
         {/* Tugmalar */}
         <div className='w-[1290px]'>
-        <div className="chart-container">
+          <div className="chart-container">
             <Chart options={options} series={series} type="area" height={646} />
           </div>
           <div className="coin-buttons flex gap-4 mb-6">
-  <button
-    onClick={() => handleDaysChange(1)}
-    className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold"
-  >
-    24h
-  </button>
-  <button
-    onClick={() => handleDaysChange(30)}
-    className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold"
-  >
-    30 Days
-  </button>
-  <button
-    onClick={() => handleDaysChange(365)}
-    className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold"
-  >
-    1 Year
-  </button>
-  <button
-    onClick={() => handleDaysChange(90)} // 3 months (90 days)
-    className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold"
-  >
-    3 Months
-  </button>
-</div>
+            <button
+              onClick={() => handleDaysChange(1)}
+              className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold"
+            >
+              24h
+            </button>
+            <button
+              onClick={() => handleDaysChange(30)}
+              className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold"
+            >
+              30 Days
+            </button>
+            <button
+              onClick={() => handleDaysChange(90)} // 3 months (90 days)
+              className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold"
+            >
+              3 Months
+            </button>
+            <button
+              onClick={() => handleDaysChange(365)}
+              className="w-[280px] border border-[#87CEEB] text-white px-4 py-2 rounded-md hover:bg-[#87CEEB] hover:text-black transition hover:font-bold"
+            >
+              1 Year
+            </button>
+
+          </div>
 
 
           {/* ApexChart */}
-          
+
         </div>
       </div>
     </div>

@@ -12,6 +12,7 @@ function Criptolist({ currency }) {
   const [visitedIds, setVisitedIds] = useState(() => {
     return JSON.parse(localStorage.getItem('visitedIds')) || [];
   });
+  const [searchTerm, setSearchTerm] = useState('');
 
   const navigate = useNavigate();
 
@@ -41,7 +42,12 @@ function Criptolist({ currency }) {
 
   const indexOfLastItem = (currentPage + 1) * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const filteredData = data.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.symbol.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   const handlePageClick = (event) => {
     setCurrentPage(event.selected);
@@ -64,6 +70,15 @@ function Criptolist({ currency }) {
 
   return (
     <div className="my-5 mx-80">
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Search For a Crypto Currency.."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="bg-black bgw-full px-4 py-2 border border-slate-700 rounded-md focus:outline-none w-full"
+        />
+      </div>
       <div className="px-4 py-7 bg-[#87CEEB] text-black rounded-t-lg font-bold flex justify-between">
         <span className="w-36">Coin</span>
         <span className="w-32 text-right">Price</span>
@@ -117,7 +132,7 @@ function Criptolist({ currency }) {
       <ReactPaginate
         previousLabel={'<'}
         nextLabel={'>'}
-        pageCount={Math.ceil(data.length / itemsPerPage)}
+        pageCount={Math.ceil(filteredData.length / itemsPerPage)}
         onPageChange={handlePageClick}
         containerClassName={'flex justify-center gap-2 my-4 items-center'}
         pageClassName={'px-4 py-2  text-[#87CEEB] rounded-full'}
